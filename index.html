@@ -363,7 +363,7 @@ const ITEMS_KEY = 'grilling-2026-items-state';
       Fill in SUPABASE_URL and SUPABASE_ANON_KEY below to enable this.
 */
 const SUPABASE_URL = 'https://yuzljvjusfbxzeirfyli.supabase.co/rest/v1/';       // e.g. 'https://abcdefgh.supabase.co'
-const SUPABASE_ANON_KEY ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1emxqdmp1c2ZieHplaXJmeWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzEzNTAsImV4cCI6MjEwMzEwNzM1MH0.LfGxbqF4KUy_kIXKsVZKZECXWm7jdbZyupxspd58lsc';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1emxqdmp1c2ZieHplaXJmeWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzEzNTAsImV4cCI6MjEwMzEwNzM1MH0.LfGxbqF4KUy_kIXKsVZKZECXWm7jdbZyupxspd58lsc';
 const HAS_CLAUDE_STORAGE = (typeof window.storage !== 'undefined' && window.storage);
 const SUPABASE_CONFIGURED = SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY.length > 20;
 let sb = null;
@@ -432,8 +432,12 @@ function renderSyncBadge(){
 if(SYNC_MODE==='supabase'){
   sb.channel('party_kv_changes')
     .on('postgres_changes', {event:'*', schema:'public', table:'party_kv'}, ()=>{ loadState(); })
-    .subscribe();
-  setInterval(loadState, 20000); // safety-net poll in case a realtime event is missed
+    .subscribe((status)=>{
+      if(status==='CHANNEL_ERROR' || status==='TIMED_OUT'){
+        console.warn('Supabase realtime channel failed ('+status+') — falling back to polling every 4s. This usually means Realtime is not enabled for the party_kv table (Database > Replication in the Supabase dashboard, or re-run: alter publication supabase_realtime add table party_kv;).');
+      }
+    });
+  setInterval(loadState, 4000); // safety-net poll — catches updates even if the realtime channel above isn't connected
 }
 
 /* ---------- DERIVED ITEMS ---------- */
@@ -535,20 +539,17 @@ function renderRoster(){
     card.className = 'fam-card'+(n===0?' out':'');
     card.innerHTML = `
       <span class="fam-name">${f.name}</span>
-      <input type="number" class="split-input veg" data-fam="${f.id}" data-kind="v" value="${v}" min="0" max="${f.count}" title="veg">
-      <input type="number" class="split-input nonveg" data-fam="${f.id}" data-kind="nv" value="${nv}" min="0" max="${f.count}" title="non-veg">
-      <span class="max">of ${f.count}</span>
+      <input type="number" class="split-input veg" data-fam="${f.id}" data-kind="v" value="${v}" min="0" title="veg">
+      <input type="number" class="split-input nonveg" data-fam="${f.id}" data-kind="nv" value="${nv}" min="0" title="non-veg">
+      <span class="max">${n} total</span>
       <button class="out-toggle" data-toggle="${f.id}" title='${n>0 ? "can\u2019t make it" : "restore"}'>${n>0 ? '×' : '+'}</button>`;
     el.appendChild(card);
   });
   el.querySelectorAll('.split-input').forEach(inp=>inp.addEventListener('change', ()=>{
     const fam = inp.dataset.fam, kind = inp.dataset.kind, famDef = FAMILIES.find(f=>f.id===fam);
     const cur = attendance[fam] ?? {v:famDef.defaultVeg, nv:famDef.count-famDef.defaultVeg};
-    let val = Math.max(0, Math.min(famDef.count, parseInt(inp.value,10) || 0));
-    const other = kind==='v' ? 'nv' : 'v';
-    let next = {...cur, [kind]: val};
-    if(next.v + next.nv > famDef.count) next[other] = Math.max(0, famDef.count - val); // keep total within headcount
-    attendance[fam] = next;
+    const val = Math.max(0, parseInt(inp.value,10) || 0); // veg and non-veg are independent — total is just whatever they add up to
+    attendance[fam] = {...cur, [kind]: val};
     saveAttendance(); renderAll();
   }));
   el.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click', ()=>{
