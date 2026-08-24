@@ -111,11 +111,11 @@
   .menu-row select:invalid{color:var(--smoke); font-weight:500;}
   .menu-row .item-del{flex:0 0 auto;}
   .add-btn{
-    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; color:var(--smoke);
-    background:none; border:1.5px dashed var(--line-strong); border-radius:10px; padding:9px 14px; cursor:pointer;
-    width:100%; text-align:left; transition:color .15s, border-color .15s;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px; color:#fff;
+    background:var(--ember); border:1.5px solid var(--ember); border-radius:10px; padding:9px 14px; cursor:pointer;
+    width:100%; text-align:left; transition:background .15s, border-color .15s; box-shadow:var(--shadow);
   }
-  .add-btn:hover{color:var(--ember-dark); border-color:var(--ember);}
+  .add-btn:hover{background:var(--ember-dark); border-color:var(--ember-dark);}
   .roster-legend .dot{width:8px; height:8px;}
   .fam-card{background:var(--card-bg); border:1px solid var(--line); border-radius:12px; padding:9px 12px;
     display:flex; align-items:center; gap:8px; transition:opacity .2s, box-shadow .2s; box-shadow:var(--shadow);}
@@ -152,6 +152,16 @@
   details[open] summary.card-head .card-title::before{transform:rotate(90deg);}
   .card-title{font-family:'Fraunces',serif; font-weight:600; font-size:19px; color:var(--char);}
   .card-progress{font-family:'Inter',sans-serif; font-weight:600; font-size:12px; color:var(--smoke); background:var(--cream-dim); padding:3px 9px; border-radius:20px;}
+  .shop-card-head{display:block !important;}
+  .card-head-top{display:flex; align-items:center; justify-content:space-between;}
+  .shopper-field{display:flex; align-items:center; gap:6px; margin-top:8px;}
+  .shopper-label{font-family:'Inter',sans-serif; font-weight:600; font-size:11px; color:var(--smoke); text-transform:uppercase; letter-spacing:.04em;}
+  .shopper-select{
+    font-family:'Inter',sans-serif; font-weight:700; font-size:12px; color:var(--ember-dark);
+    background:var(--ember-tint); border:1px solid transparent; border-radius:7px; padding:3px 8px; cursor:pointer;
+  }
+  .shopper-select:hover{border-color:var(--ember);}
+  .shopper-select:focus{outline:none; border-color:var(--ember);}
   ul.items{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px; min-height:10px;}
   li.item{display:flex; align-items:flex-start; gap:10px; padding:11px 6px; border-radius:10px;}
   li.item + li.item{border-top:1px solid var(--line);}
@@ -215,10 +225,11 @@
   .src-label:first-child{padding-top:2px;}
   .empty-note{color:var(--smoke); font-size:14px; padding:20px 4px; grid-column:1/-1;}
 
-  .add-card{border:1.5px dashed var(--line-strong); box-shadow:none; background:transparent;}
-  .add-card .add-trigger{width:100%; background:none; border:none; padding:10px 2px; cursor:pointer; color:var(--smoke);
-    font-family:'Inter',sans-serif; font-weight:600; font-size:14px; text-align:left; transition:color .15s;}
-  .add-card .add-trigger:hover{color:var(--ember-dark);}
+  .add-card{border:1.5px solid var(--ember); box-shadow:var(--shadow); background:var(--ember);}
+  .add-card .add-trigger{width:100%; background:none; border:none; padding:10px 2px; cursor:pointer; color:#fff;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:14px; text-align:left; transition:opacity .15s;}
+  .add-card .add-trigger:hover{opacity:.85;}
+  .add-card.editing{background:var(--card-bg); border-color:var(--line);}
   .add-form{display:flex; flex-direction:column; gap:10px;}
   .add-form input, .add-form select{
     font-family:'Inter',sans-serif; font-size:14px; padding:9px 11px; border-radius:9px; border:1px solid var(--line-strong);
@@ -290,14 +301,17 @@
   <section id="itemsSection">
     <div class="section-head"><h2>Everything for the party</h2><span class="section-note">one view at a time — pick how you want to look at it</span></div>
     <div class="view-tabs">
-      <button class="view-tab" data-view="all">All items</button>
-      <button class="view-tab" data-view="person">By person</button>
       <button class="view-tab" data-view="store">Shopping list</button>
+      <button class="view-tab" data-view="all">All items</button>
     </div>
     <input type="text" id="itemFilter" class="filter-input" placeholder="Search items, stores, or names…">
-    <div class="view-panel" data-panel="all" id="masterList"></div>
-    <div class="view-panel cards" data-panel="person" id="bringCards"></div>
     <div class="view-panel cards" data-panel="store" id="shopCards"></div>
+    <div class="view-panel" data-panel="all" id="masterList"></div>
+  </section>
+
+  <section id="checklistSection">
+    <div class="section-head"><h2>Checklist for the individual</h2><span class="section-note">what each person needs to bring · drag an item onto a name to assign it</span></div>
+    <div class="cards" id="bringCards"></div>
   </section>
 
   <footer>Changes — headcounts, checkmarks, reassignments, quantities — are shared live with everyone viewing this list.</footer>
@@ -390,11 +404,13 @@ let attendance = {}; FAMILIES.forEach(f=>attendance[f.id]={v:f.defaultVeg, nv:f.
 let checked = {};
 let itemsState = { overrides:{}, deleted:[], custom:[] }; // overrides: {id:{responsible?, qtyOverride?}}
 let menu = []; // [{id, name, assignedTo}]
+let storeShoppers = {Meijer:null, Costco:null, Halal:null}; // who's doing the actual shopping run at each store
 
 const ATT_KEY = 'grilling-2026-attendance';
 const CHK_KEY = 'grilling-2026-checklist';
 const ITEMS_KEY = 'grilling-2026-items-state';
 const MENU_KEY = 'grilling-2026-menu';
+const SHOPPERS_KEY = 'grilling-2026-shoppers';
 
 /* ---------- STORAGE LAYER ----------
    Works two ways so the SAME file works both inside Claude and hosted anywhere else:
@@ -439,6 +455,7 @@ async function kvSet(key, value){
 }
 
 function isEditingSomething(){
+  if(document.querySelector('.add-form')) return true; // an add-item form is open, even if nothing inside it is focused yet
   const ae = document.activeElement;
   if(!ae) return false;
   return ae.tagName==='INPUT' || ae.tagName==='SELECT' || ae.tagName==='TEXTAREA';
@@ -460,6 +477,7 @@ async function loadState(){
   try{ const c = await kvGet(CHK_KEY); if(c) checked = JSON.parse(c); }catch(e){}
   try{ const i = await kvGet(ITEMS_KEY); if(i) itemsState = {overrides:{}, deleted:[], custom:[], ...JSON.parse(i)}; }catch(e){}
   try{ const m = await kvGet(MENU_KEY); if(m) menu = JSON.parse(m); }catch(e){}
+  try{ const s = await kvGet(SHOPPERS_KEY); if(s) storeShoppers = {...storeShoppers, ...JSON.parse(s)}; }catch(e){}
   if(!isEditingSomething()){ renderAll(); } // don't blow away a field the person is actively typing in
   renderSyncBadge();
 }
@@ -467,6 +485,7 @@ async function saveAttendance(){ await kvSet(ATT_KEY, JSON.stringify(attendance)
 async function saveChecked(){ await kvSet(CHK_KEY, JSON.stringify(checked)); }
 async function saveItemsState(){ await kvSet(ITEMS_KEY, JSON.stringify(itemsState)); }
 async function saveMenu(){ await kvSet(MENU_KEY, JSON.stringify(menu)); }
+async function saveShoppers(){ await kvSet(SHOPPERS_KEY, JSON.stringify(storeShoppers)); }
 
 function renderSyncBadge(){
   const el = document.getElementById('syncBadge');
@@ -735,6 +754,7 @@ function addFormHtml(context){
 function bindAddCard(cardEl, defaultResponsible, defaultCat){
   const trigger = cardEl.querySelector('.add-trigger');
   trigger.addEventListener('click', ()=>{
+    cardEl.classList.add('editing');
     cardEl.innerHTML = addFormHtml(defaultResponsible);
     cardEl.querySelector('[data-cancel-add]').addEventListener('click', renderAll);
     cardEl.querySelector('[data-save-add]').addEventListener('click', ()=>{
@@ -839,10 +859,21 @@ function renderShopCards(){
     const key = 'shop:'+store;
     const card = document.createElement('details'); card.className = 'card'; card.dataset.sectionKey = key;
     card.open = (key in openSections) ? openSections[key] : false;
-    card.innerHTML = `<summary class="card-head"><span class="card-title">${store}</span><span class="card-progress">${doneCount}/${mine.length}</span></summary>
+    const shopperOptions = ['<option value="">No shopper yet</option>']
+      .concat(CANON_PEOPLE.map(p=>`<option value="${p}" ${storeShoppers[store]===p?'selected':''}>${p}</option>`)).join('');
+    card.innerHTML = `<summary class="card-head shop-card-head">
+        <div class="card-head-top"><span class="card-title">${store}</span><span class="card-progress">${doneCount}/${mine.length}</span></div>
+        <div class="shopper-field"><span class="shopper-label">Shopping:</span><select class="shopper-select" data-shopper-store="${store}">${shopperOptions}</select></div>
+      </summary>
       <ul class="items">${groupedListHtml(mine, {draggable:false, editableQty:true})}</ul>`;
     el.appendChild(card);
     bindCommon(card);
+    const shopperSel = card.querySelector('[data-shopper-store]');
+    shopperSel.addEventListener('click', e=>e.stopPropagation());
+    shopperSel.addEventListener('change', ()=>{
+      storeShoppers[store] = shopperSel.value || null;
+      saveShoppers(); renderAll();
+    });
   });
   const addCard = document.createElement('div'); addCard.className = 'card add-card';
   addCard.innerHTML = `<button class="add-trigger">+ add item to shopping list</button>`;
@@ -878,8 +909,8 @@ function renderMasterList(){
   });
 }
 
-const VIEWS = ['all','person','store'];
-let currentView = 'all';
+const VIEWS = ['all','store'];
+let currentView = 'store';
 function setView(view){
   currentView = view;
   document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
@@ -889,10 +920,7 @@ document.querySelectorAll('.view-tab').forEach(t=>t.addEventListener('click', ()
 document.getElementById('itemFilter').addEventListener('input', (e)=>{ filterQuery = e.target.value.trim(); renderMasterList(); });
 
 function renderAll(){ renderGauge(); renderRoster(); renderMenu(); renderMasterList(); renderBringCards(); renderShopCards(); }
-setView('all');
-document.addEventListener('focusout', ()=>{
-  setTimeout(()=>{ if(!isEditingSomething()) renderAll(); }, 0); // catch up on anything missed while a field was focused
-});
+setView('store');
 loadState();
 </script>
 </body>
