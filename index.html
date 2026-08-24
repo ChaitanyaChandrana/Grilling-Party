@@ -233,7 +233,7 @@
     <p class="tagline">Who's cooking what?</p>
     <p class="subline">Adjust who's coming, drag items between people, and edit quantities — everyone sees it live.</p>
     <div class="gauge">
-      <div class="gauge-count"><span class="num" id="gaugeNum">28</span><span class="of">/ 28 coming</span></div>
+      <div class="gauge-count"><span class="num" id="gaugeNum">28</span><span class="of">coming</span></div>
       <div class="gauge-bar">
         <div class="gauge-track"><div class="gauge-fill-veg" id="fillVeg" style="width:64%"></div><div class="gauge-fill-nonveg" id="fillNonveg" style="width:36%"></div></div>
         <div class="gauge-legend"><span><span class="dot veg"></span><span id="vegCount">18</span> veg</span><span><span class="dot nonveg"></span><span id="nonvegCount">10</span> non-veg</span></div>
@@ -273,7 +273,7 @@ const FAMILIES = [
   {id:'gopi',     name:'Gopi',      count:3, defaultVeg:3},
   {id:'madhu',    name:'Madhu',     count:4, defaultVeg:0},
   {id:'prashanth',name:'Prashanth', count:4, defaultVeg:4},
-  {id:'rakesh',   name:'Rakesh',    count:4, defaultVeg:0},
+  {id:'rakesh',   name:'Rakesh',    count:5, defaultVeg:0},
   {id:'sridhar',  name:'Sridhar',   count:4, defaultVeg:0},
 ];
 const BASE_TOTAL = FAMILIES.reduce((s,f)=>s+f.count,0);
