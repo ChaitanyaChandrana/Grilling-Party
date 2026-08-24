@@ -178,9 +178,15 @@
   .reset-qty:hover{color:var(--ember-dark);}
   .store-tag{color:var(--smoke); font-weight:500;}
   .resp-tag{color:var(--ember-dark); font-weight:600;}
+  .resp-select{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:11.5px; color:var(--ember-dark);
+    background:var(--ember-tint); border:1px solid transparent; border-radius:6px; padding:2px 6px; cursor:pointer;
+  }
+  .resp-select:hover{border-color:var(--ember);}
+  .resp-select:focus{outline:none; border-color:var(--ember);}
   .diet-dot{width:6px;height:6px;border-radius:50%;display:inline-block; margin-right:2px;}
   .diet-dot.veg{background:var(--leaf);} .diet-dot.nonveg{background:var(--ember);}
-  .item-del{background:none; border:none; color:var(--smoke); font-size:16px; cursor:pointer; padding:3px 5px; line-height:1; opacity:.3; margin-left:auto; border-radius:6px; transition:opacity .15s, background .15s;}
+  .item-del{background:none; border:none; color:var(--smoke); font-size:16px; cursor:pointer; padding:3px 5px; line-height:1; opacity:.6; margin-left:auto; border-radius:6px; transition:opacity .15s, background .15s;}
   .item-del:hover{opacity:1; color:var(--ember-dark); background:var(--ember-tint);}
   .cat-label{
     font-family:'Inter',sans-serif; font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
@@ -432,6 +438,11 @@ async function kvSet(key, value){
   try{ localStorage.setItem(key, value); }catch(e){}
 }
 
+function isEditingSomething(){
+  const ae = document.activeElement;
+  if(!ae) return false;
+  return ae.tagName==='INPUT' || ae.tagName==='SELECT' || ae.tagName==='TEXTAREA';
+}
 async function loadState(){
   try{
     const a = await kvGet(ATT_KEY);
@@ -449,7 +460,7 @@ async function loadState(){
   try{ const c = await kvGet(CHK_KEY); if(c) checked = JSON.parse(c); }catch(e){}
   try{ const i = await kvGet(ITEMS_KEY); if(i) itemsState = {overrides:{}, deleted:[], custom:[], ...JSON.parse(i)}; }catch(e){}
   try{ const m = await kvGet(MENU_KEY); if(m) menu = JSON.parse(m); }catch(e){}
-  renderAll();
+  if(!isEditingSomething()){ renderAll(); } // don't blow away a field the person is actively typing in
   renderSyncBadge();
 }
 async function saveAttendance(){ await kvSet(ATT_KEY, JSON.stringify(attendance)); }
@@ -624,7 +635,15 @@ function itemRowHtml(item, opts){
   const checkKey = opts.checkKey || item.id;
   const isChecked = !!checked[checkKey];
   const storeTag = item.store ? `<span class="store-tag">· ${item.store}</span>` : '';
-  const respTag = (opts.showResponsible && item.responsible) ? `<span class="resp-tag">→ ${item.responsible}</span>` : '';
+  let respTag = '';
+  if(opts.showResponsible){
+    const assignOptions = ['<option value="">Unassigned</option>']
+      .concat(CANON_PEOPLE.map(p=>`<option value="${p}" ${item.responsible===p?'selected':''}>${p}</option>`))
+      .concat([`<option value="Everyone" ${item.responsible==='Everyone'?'selected':''}>Everyone</option>`]).join('');
+    respTag = `<select class="resp-select" data-resp-item="${item.id}" data-resp-custom="${item.isCustom}">${assignOptions}</select>`;
+  } else if(item.responsible){
+    respTag = `<span class="resp-tag">→ ${item.responsible}</span>`;
+  }
   const dietDot = item.diet==='veg' ? '<span class="diet-dot veg"></span>' : item.diet==='nonveg' ? '<span class="diet-dot nonveg"></span>' : '';
   let qtyHtml = '';
   if(opts.editableQty){
@@ -650,6 +669,13 @@ function itemRowHtml(item, opts){
 }
 
 function bindCommon(container){
+  container.querySelectorAll('[data-resp-item]').forEach(sel=>{
+    sel.addEventListener('click', e=>e.stopPropagation());
+    sel.addEventListener('change', ()=>{
+      setResponsible(sel.dataset.respItem, sel.dataset.respCustom==='true', sel.value || null);
+      renderAll();
+    });
+  });
   container.querySelectorAll('[data-check], [data-checkarea]').forEach(elm=>{
     elm.addEventListener('click', (e)=>{
       const id = elm.dataset.check || elm.dataset.checkarea;
@@ -864,6 +890,9 @@ document.getElementById('itemFilter').addEventListener('input', (e)=>{ filterQue
 
 function renderAll(){ renderGauge(); renderRoster(); renderMenu(); renderMasterList(); renderBringCards(); renderShopCards(); }
 setView('all');
+document.addEventListener('focusout', ()=>{
+  setTimeout(()=>{ if(!isEditingSomething()) renderAll(); }, 0); // catch up on anything missed while a field was focused
+});
 loadState();
 </script>
 </body>
