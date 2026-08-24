@@ -227,7 +227,7 @@
     <div class="hero-inner">
     <p class="eyebrow">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12.5 2.5c.6 2.7-1.9 4.1-3.2 6.2-1.4 2.2-1.6 5 .2 6.9 1.2 1.3 3 1.8 4.6 1.2-1.1-.5-1.9-1.5-1.9-2.8 0-1.6 1.3-2.3 1.7-3.7.9 1 1.7 2 1.9 3.4.3 2-.7 3.9-2.4 5-3.6.6-7.6-1.8-8.3-5.5-.6-3.2 1.3-6 3.7-7.9 1.3-1 2.8-1.9 3.7-3.3" fill="currentColor"/></svg>
-      Telugu Gang · 2026 date TBD · Starts 10:00 AM
+      Telugu Gang · August 29, 2026 · Starts 11:00 AM
     </p>
     <h1><span class="hl">Grilling Party</span></h1>
     <p class="tagline">Who's cooking what?</p>
@@ -515,9 +515,9 @@ function getQtyInfo(item){
 /* ---------- RENDER ---------- */
 function renderGauge(){
   const t = totals();
-  const totalRounded = Math.round(t.total);
   const vegRounded = Math.round(t.veg);
-  const nonvegRounded = totalRounded - vegRounded; // ensures the two always sum to the total shown
+  const nonvegRounded = Math.round(t.nonveg);
+  const totalRounded = vegRounded + nonvegRounded; // total is always exactly veg + non-veg, never a separate figure
   document.getElementById('gaugeNum').textContent = totalRounded;
   document.getElementById('vegCount').textContent = vegRounded;
   document.getElementById('nonvegCount').textContent = nonvegRounded;
