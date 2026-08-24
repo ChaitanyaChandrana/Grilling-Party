@@ -362,8 +362,8 @@ const ITEMS_KEY = 'grilling-2026-items-state';
    2) Hosted elsewhere (GitHub Pages, Netlify, etc.) — uses Supabase for live sync.
       Fill in SUPABASE_URL and SUPABASE_ANON_KEY below to enable this.
 */
-const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';       // e.g. 'https://abcdefgh.supabase.co'
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_URL = 'https://yuzljvjusfbxzeirfyli.supabase.co/rest/v1/';       // e.g. 'https://abcdefgh.supabase.co'
+const SUPABASE_ANON_KEY ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1emxqdmp1c2ZieHplaXJmeWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzEzNTAsImV4cCI6MjEwMzEwNzM1MH0.LfGxbqF4KUy_kIXKsVZKZECXWm7jdbZyupxspd58lsc';
 const HAS_CLAUDE_STORAGE = (typeof window.storage !== 'undefined' && window.storage);
 const SUPABASE_CONFIGURED = SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY.length > 20;
 let sb = null;
