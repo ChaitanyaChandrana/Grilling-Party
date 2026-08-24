@@ -91,6 +91,31 @@
   /* ROSTER */
   .roster{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px;}
   .roster-legend{font-size:12px; color:var(--smoke); font-weight:500; margin-bottom:10px; display:flex; gap:16px;}
+
+  /* FOOD MENU */
+  .menu-list{display:flex; flex-direction:column; gap:6px; margin-bottom:12px;}
+  .menu-row{
+    background:var(--card-bg); border:1px solid var(--line); border-radius:12px; padding:9px 12px;
+    display:flex; align-items:center; gap:10px; box-shadow:var(--shadow);
+  }
+  .menu-row input[type="text"]{
+    flex:1; min-width:0; border:none; background:none; font-family:'Inter',sans-serif; font-weight:500;
+    font-size:14.5px; color:var(--char); padding:4px 2px;
+  }
+  .menu-row input[type="text"]:focus{outline:none; border-bottom:1.5px solid var(--ember);}
+  .menu-row input[type="text"]::placeholder{color:var(--smoke); font-weight:400;}
+  .menu-row select{
+    flex:0 0 auto; font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--char-soft);
+    background:var(--cream-dim); border:1px solid var(--line); border-radius:8px; padding:6px 10px;
+  }
+  .menu-row select:invalid{color:var(--smoke); font-weight:500;}
+  .menu-row .item-del{flex:0 0 auto;}
+  .add-btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; color:var(--smoke);
+    background:none; border:1.5px dashed var(--line-strong); border-radius:10px; padding:9px 14px; cursor:pointer;
+    width:100%; text-align:left; transition:color .15s, border-color .15s;
+  }
+  .add-btn:hover{color:var(--ember-dark); border-color:var(--ember);}
   .roster-legend .dot{width:8px; height:8px;}
   .fam-card{background:var(--card-bg); border:1px solid var(--line); border-radius:12px; padding:9px 12px;
     display:flex; align-items:center; gap:8px; transition:opacity .2s, box-shadow .2s; box-shadow:var(--shadow);}
@@ -175,6 +200,7 @@
   }
   .master-cat-title .cat-count{font-family:'Inter',sans-serif; font-weight:600; font-size:12.5px; color:var(--smoke);}
   .master-list-box{background:var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:16px 20px 8px; box-shadow:var(--shadow);}
+  .master-add-card{margin-top:10px; padding:10px 14px;}
   .src-label{
     font-family:'Inter',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
     color:var(--smoke-dark); padding:12px 6px 6px;
@@ -247,6 +273,12 @@
     <div class="section-head"><h2>Who's coming</h2><span class="section-note">tap a number to edit it · × to mark a family out</span></div>
     <div class="roster-legend"><span><span class="dot veg"></span>veg</span><span><span class="dot nonveg"></span>non-veg</span></div>
     <div class="roster" id="roster"></div>
+  </section>
+
+  <section id="menuSection">
+    <div class="section-head"><h2>Food menu</h2><span class="section-note">write the dish, pick who's making it</span></div>
+    <div class="menu-list" id="menuList"></div>
+    <button class="add-btn" id="addMenuRow">+ add dish</button>
   </section>
 
   <section id="itemsSection">
@@ -351,10 +383,12 @@ const BASE_ITEMS = [
 let attendance = {}; FAMILIES.forEach(f=>attendance[f.id]={v:f.defaultVeg, nv:f.count-f.defaultVeg});
 let checked = {};
 let itemsState = { overrides:{}, deleted:[], custom:[] }; // overrides: {id:{responsible?, qtyOverride?}}
+let menu = []; // [{id, name, assignedTo}]
 
 const ATT_KEY = 'grilling-2026-attendance';
 const CHK_KEY = 'grilling-2026-checklist';
 const ITEMS_KEY = 'grilling-2026-items-state';
+const MENU_KEY = 'grilling-2026-menu';
 
 /* ---------- STORAGE LAYER ----------
    Works two ways so the SAME file works both inside Claude and hosted anywhere else:
@@ -414,12 +448,14 @@ async function loadState(){
   }catch(e){}
   try{ const c = await kvGet(CHK_KEY); if(c) checked = JSON.parse(c); }catch(e){}
   try{ const i = await kvGet(ITEMS_KEY); if(i) itemsState = {overrides:{}, deleted:[], custom:[], ...JSON.parse(i)}; }catch(e){}
+  try{ const m = await kvGet(MENU_KEY); if(m) menu = JSON.parse(m); }catch(e){}
   renderAll();
   renderSyncBadge();
 }
 async function saveAttendance(){ await kvSet(ATT_KEY, JSON.stringify(attendance)); }
 async function saveChecked(){ await kvSet(CHK_KEY, JSON.stringify(checked)); }
 async function saveItemsState(){ await kvSet(ITEMS_KEY, JSON.stringify(itemsState)); }
+async function saveMenu(){ await kvSet(MENU_KEY, JSON.stringify(menu)); }
 
 function renderSyncBadge(){
   const el = document.getElementById('syncBadge');
@@ -482,9 +518,9 @@ function deleteItem(id, isCustom){
   else { if(!itemsState.deleted.includes(id)) itemsState.deleted.push(id); }
   saveItemsState();
 }
-function addCustomItem({name, qtyLabel, responsible, store, diet}){
+function addCustomItem({name, qtyLabel, responsible, store, diet, cat}){
   const id = 'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
-  itemsState.custom.push({id, name, qty:{n:null,label:qtyLabel||''}, responsible: responsible||null, store: store||null, diet: diet||'both'});
+  itemsState.custom.push({id, name, qty:{n:null,label:qtyLabel||''}, responsible: responsible||null, store: store||null, diet: diet||'both', cat: cat||'other'});
   saveItemsState();
   return id;
 }
@@ -670,7 +706,7 @@ function addFormHtml(context){
       <div class="add-form-actions"><button class="btn-save" data-save-add>Add item</button><button class="btn-cancel" data-cancel-add>Cancel</button></div>
     </div>`;
 }
-function bindAddCard(cardEl, defaultResponsible){
+function bindAddCard(cardEl, defaultResponsible, defaultCat){
   const trigger = cardEl.querySelector('.add-trigger');
   trigger.addEventListener('click', ()=>{
     cardEl.innerHTML = addFormHtml(defaultResponsible);
@@ -681,15 +717,53 @@ function bindAddCard(cardEl, defaultResponsible){
       const qty = cardEl.querySelector('[data-f="qty"]').value.trim();
       const store = cardEl.querySelector('[data-f="store"]').value || null;
       const responsible = cardEl.querySelector('[data-f="responsible"]').value.trim() || null;
-      addCustomItem({name, qtyLabel:qty, responsible, store, diet:'both'});
+      addCustomItem({name, qtyLabel:qty, responsible, store, diet:'both', cat:defaultCat});
       renderAll();
     });
   });
 }
 
 const CANON_PEOPLE = ['Madhu','Anjan','Chaitanya','Sridhar','Rakesh','Gopi','Prashanth'];
+let openSections = {}; // remembers which <details> panels are open across re-renders (edits, checks, sync updates)
+
+function renderMenu(){
+  const el = document.getElementById('menuList'); el.innerHTML = '';
+  menu.forEach(row=>{
+    const div = document.createElement('div'); div.className = 'menu-row';
+    const options = ['<option value="">Assign to…</option>']
+      .concat(CANON_PEOPLE.map(p=>`<option value="${p}" ${row.assignedTo===p?'selected':''}>${p}</option>`)).join('');
+    div.innerHTML = `
+      <input type="text" data-menu-name="${row.id}" placeholder="e.g. Chicken biryani" value="${row.name||''}">
+      <select data-menu-person="${row.id}">${options}</select>
+      <button class="item-del" data-menu-del="${row.id}" title="remove dish">×</button>`;
+    el.appendChild(div);
+  });
+  el.querySelectorAll('[data-menu-name]').forEach(inp=>inp.addEventListener('change', ()=>{
+    const row = menu.find(m=>m.id===inp.dataset.menuName);
+    if(row){ row.name = inp.value.trim(); saveMenu(); }
+  }));
+  el.querySelectorAll('[data-menu-person]').forEach(sel=>sel.addEventListener('change', ()=>{
+    const row = menu.find(m=>m.id===sel.dataset.menuPerson);
+    if(row){ row.assignedTo = sel.value || null; saveMenu(); renderMenu(); }
+  }));
+  el.querySelectorAll('[data-menu-del]').forEach(btn=>btn.addEventListener('click', ()=>{
+    menu = menu.filter(m=>m.id!==btn.dataset.menuDel);
+    saveMenu(); renderMenu();
+  }));
+}
+document.getElementById('addMenuRow').addEventListener('click', ()=>{
+  const id = 'menu-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+  menu.push({id, name:'', assignedTo:null});
+  saveMenu();
+  renderMenu();
+  const newInput = document.querySelector(`[data-menu-name="${id}"]`);
+  if(newInput) newInput.focus();
+});
+
 function renderBringCards(){
-  const el = document.getElementById('bringCards'); el.innerHTML = '';
+  const el = document.getElementById('bringCards');
+  el.querySelectorAll('details.card[data-section-key]').forEach(d=>{ openSections[d.dataset.sectionKey] = d.open; });
+  el.innerHTML = '';
   const items = getEffectiveItems();
   const namedPeople = items.filter(i=>i.responsible && i.responsible!=='Everyone').flatMap(i=>i.responsible.split(' / '));
   const hasEveryoneItem = items.some(i=>i.responsible==='Everyone');
@@ -700,7 +774,9 @@ function renderBringCards(){
   const unclaimed = items.filter(i=>!i.store && !i.responsible);
   if(unclaimed.length){
     const doneCount = unclaimed.filter(i=>checked[i.id]).length;
-    const card = document.createElement('details'); card.className = 'card'; card.open = true;
+    const key = 'bring:Unassigned';
+    const card = document.createElement('details'); card.className = 'card'; card.dataset.sectionKey = key;
+    card.open = (key in openSections) ? openSections[key] : true;
     card.innerHTML = `<summary class="card-head"><span class="card-title">Unassigned</span><span class="card-progress">${doneCount}/${unclaimed.length}</span></summary>
       <ul class="items">${groupedListHtml(unclaimed, {draggable:true, editableQty:false})}</ul>`;
     el.appendChild(card);
@@ -711,7 +787,9 @@ function renderBringCards(){
     const mine = items.filter(i=>i.responsible && (i.responsible==='Everyone' || i.responsible.split(' / ').includes(person)));
     if(!mine.length) return;
     const doneCount = mine.filter(i=>checked[bringKey(i,person)]).length;
-    const card = document.createElement('details'); card.className = 'card'; card.open = true;
+    const key = 'bring:'+person;
+    const card = document.createElement('details'); card.className = 'card'; card.dataset.sectionKey = key;
+    card.open = (key in openSections) ? openSections[key] : true;
     card.innerHTML = `<summary class="card-head"><span class="card-title">${person}</span><span class="card-progress">${doneCount}/${mine.length}</span></summary>
       <ul class="items">${groupedListHtml(mine, i=>({draggable:true, editableQty:false, personTag:true, checkKey:bringKey(i,person)}))}</ul>`;
     el.appendChild(card);
@@ -723,14 +801,18 @@ function renderBringCards(){
 }
 
 function renderShopCards(){
-  const el = document.getElementById('shopCards'); el.innerHTML = '';
+  const el = document.getElementById('shopCards');
+  el.querySelectorAll('details.card[data-section-key]').forEach(d=>{ openSections[d.dataset.sectionKey] = d.open; });
+  el.innerHTML = '';
   const items = getEffectiveItems();
   const stores = ['Meijer','Costco','Halal'];
   stores.forEach(store=>{
     const mine = items.filter(i=>i.store && i.store.includes(store));
     if(!mine.length) return;
     const doneCount = mine.filter(i=>checked[i.id]).length;
-    const card = document.createElement('details'); card.className = 'card';
+    const key = 'shop:'+store;
+    const card = document.createElement('details'); card.className = 'card'; card.dataset.sectionKey = key;
+    card.open = (key in openSections) ? openSections[key] : false;
     card.innerHTML = `<summary class="card-head"><span class="card-title">${store}</span><span class="card-progress">${doneCount}/${mine.length}</span></summary>
       <ul class="items">${groupedListHtml(mine, {draggable:false, editableQty:true})}</ul>`;
     el.appendChild(card);
@@ -750,21 +832,23 @@ function matchesFilter(item){
          (item.responsible||'').toLowerCase().includes(q);
 }
 
+const PHASE_DEFAULT_CAT = {setup:'equipment', food:'food', games:'games'};
 function renderMasterList(){
   const el = document.getElementById('masterList'); el.innerHTML = '';
   const items = getEffectiveItems().filter(matchesFilter);
-  if(!items.length){ el.innerHTML = `<div class="empty-note">No items match "${filterQuery}".</div>`; return; }
+  if(filterQuery && !items.length){ el.innerHTML = `<div class="empty-note">No items match "${filterQuery}".</div>`; return; }
   PHASE_ORDER.forEach(phase=>{
     const inPhase = items.filter(i=>phaseOf(i)===phase);
-    if(!inPhase.length) return;
+    if(!inPhase.length && filterQuery) return; // hide empty phases only while actively searching
     const sorted = sortByCat(inPhase);
     const catBlock = document.createElement('div'); catBlock.className = 'master-cat';
     let html = `<h3 class="master-cat-title">${PHASE_LABEL[phase]} <span class="cat-count">${inPhase.length} item${inPhase.length===1?'':'s'}</span></h3><div class="master-list-box"><ul class="items">`;
     sorted.forEach(i=>{ html += itemRowHtml(i, {draggable:false, editableQty:false, showResponsible:true}); });
-    html += `</ul></div>`;
+    html += `</ul></div><div class="card add-card master-add-card"><button class="add-trigger">+ add item to ${PHASE_LABEL[phase].toLowerCase()}</button></div>`;
     catBlock.innerHTML = html;
     el.appendChild(catBlock);
     bindCommon(catBlock);
+    bindAddCard(catBlock.querySelector('.master-add-card'), '', PHASE_DEFAULT_CAT[phase]);
   });
 }
 
@@ -778,7 +862,7 @@ function setView(view){
 document.querySelectorAll('.view-tab').forEach(t=>t.addEventListener('click', ()=>setView(t.dataset.view)));
 document.getElementById('itemFilter').addEventListener('input', (e)=>{ filterQuery = e.target.value.trim(); renderMasterList(); });
 
-function renderAll(){ renderGauge(); renderRoster(); renderMasterList(); renderBringCards(); renderShopCards(); }
+function renderAll(){ renderGauge(); renderRoster(); renderMenu(); renderMasterList(); renderBringCards(); renderShopCards(); }
 setView('all');
 loadState();
 </script>
