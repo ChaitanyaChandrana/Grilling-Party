@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telugu Gang Grilling Party — 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#241F1A; --char-soft:#3D362D;
+    --cream:#FBF6EC; --cream-dim:#F1E7D4; --card-bg:#FFFEFA;
+    --ember:#CB5A2A; --ember-dark:#A8451D; --ember-tint:#FBE7D8;
+    --marigold:#EAAE45; --leaf:#5E7D4F; --leaf-tint:#E7EFDF;
+    --smoke:#948A7C; --smoke-dark:#6E655A;
+    --line:rgba(36,31,26,0.09); --line-strong:rgba(36,31,26,0.16);
+    --shadow: 0 1px 2px rgba(36,31,26,0.04), 0 12px 28px -8px rgba(36,31,26,0.14);
+    --shadow-lift: 0 1px 2px rgba(36,31,26,0.05), 0 18px 36px -10px rgba(36,31,26,0.20);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--cream); color:var(--char-soft);
+    font-family:'Inter',-apple-system,sans-serif; font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 24px 96px;}
+
+  /* HEADER */
+  header.hero{
+    background:linear-gradient(165deg,#2B251E 0%, var(--char) 55%, #201B16 100%);
+    color:var(--cream); border-radius:26px; padding:44px 40px 38px; position:relative; overflow:hidden;
+    box-shadow:var(--shadow-lift);
+  }
+  header.hero::before{content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 90% -15%, rgba(234,174,69,0.30), transparent 52%),
+               radial-gradient(circle at 0% 130%, rgba(203,90,42,0.32), transparent 50%);
+    pointer-events:none;}
+  header.hero::after{content:""; position:absolute; inset:0; opacity:.05; pointer-events:none;
+    background-image:radial-gradient(circle, #fff 1px, transparent 1px); background-size:14px 14px;}
+  .hero-inner{position:relative; z-index:1;}
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--marigold); margin:0 0 14px;
+  }
+  .eyebrow svg{flex-shrink:0;}
+  h1{margin:0 0 6px; letter-spacing:-0.02em; line-height:1.02;}
+  h1 .hl{
+    display:inline-block; background:var(--ember); color:var(--cream); padding:4px 20px 8px; border-radius:12px;
+    font-family:'Fraunces',serif; font-weight:700; font-optical-sizing:auto; letter-spacing:-0.01em;
+    font-size:clamp(46px,8vw,78px); line-height:1.05;
+  }
+  .tagline{font-family:'Fraunces',serif; font-weight:500; font-size:clamp(19px,2.6vw,24px); color:var(--cream); opacity:.85; margin:0 0 14px; letter-spacing:-0.01em;}
+  .subline{color:var(--cream); opacity:.68; margin:0 0 28px; font-size:15.5px; max-width:46ch;}
+  .gauge{position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:26px; align-items:center;}
+  .gauge-count{display:flex; align-items:baseline; gap:9px;}
+  .gauge-count .num{font-family:'Fraunces',serif; font-weight:600; font-size:56px; color:var(--marigold); line-height:1; letter-spacing:-0.02em;}
+  .gauge-count .of{font-family:'Inter',sans-serif; font-weight:500; font-size:14.5px; color:var(--cream); opacity:.6;}
+  .gauge-bar{flex:1 1 240px; min-width:220px;}
+  .gauge-track{height:9px; border-radius:6px; background:rgba(255,255,255,0.14); overflow:hidden; display:flex;}
+  .gauge-fill-veg{background:var(--leaf); height:100%; transition:width .4s cubic-bezier(.4,0,.2,1);}
+  .gauge-fill-nonveg{background:var(--ember); height:100%; transition:width .4s cubic-bezier(.4,0,.2,1);}
+  .gauge-legend{display:flex; gap:18px; margin-top:10px; font-family:'Inter',sans-serif; font-weight:500; font-size:12.5px; color:var(--cream); opacity:.7;}
+  .dot{display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle;}
+  .dot.veg{background:var(--leaf);} .dot.nonveg{background:var(--ember);}
+  .sync-badge{margin:16px 0 0; font-size:11.5px; font-weight:600; color:var(--marigold); opacity:.75; letter-spacing:.02em;}
+
+  /* SECTIONS */
+  section{margin-top:48px;}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; gap:12px; flex-wrap:wrap;}
+  .section-head h2{font-family:'Fraunces',serif; font-size:25px; font-weight:600; margin:0; letter-spacing:-0.01em; color:var(--char);}
+  .section-note{font-size:13px; color:var(--smoke); font-weight:500;}
+
+  /* VIEW TABS */
+  .view-tabs{display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;}
+  .view-tab{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:14px; color:var(--smoke);
+    background:var(--cream-dim); border:1px solid transparent; border-radius:10px; padding:9px 16px; cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .view-tab:hover{color:var(--char);}
+  .view-tab.active{background:var(--char); color:var(--cream);}
+  .filter-input{
+    width:100%; font-family:'Inter',sans-serif; font-size:14.5px; padding:11px 16px; margin-bottom:22px;
+    border:1px solid var(--line-strong); border-radius:12px; background:var(--card-bg); color:var(--char);
+  }
+  .filter-input:focus{outline:none; border-color:var(--ember); box-shadow:0 0 0 3px var(--ember-tint);}
+
+  /* ROSTER */
+  .roster{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px;}
+  .roster-legend{font-size:12px; color:var(--smoke); font-weight:500; margin-bottom:10px; display:flex; gap:16px;}
+  .roster-legend .dot{width:8px; height:8px;}
+  .fam-card{background:var(--card-bg); border:1px solid var(--line); border-radius:12px; padding:9px 12px;
+    display:flex; align-items:center; gap:8px; transition:opacity .2s, box-shadow .2s; box-shadow:var(--shadow);}
+  .fam-card.out{opacity:.42;}
+  .fam-name{font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--char); flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .split-input{
+    width:32px; flex:0 0 auto; text-align:center; font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px;
+    border:none; border-radius:7px; padding:5px 0; color:var(--char); -moz-appearance:textfield;
+  }
+  .split-input::-webkit-inner-spin-button, .split-input::-webkit-outer-spin-button{-webkit-appearance:none; margin:0;}
+  .split-input:focus{outline:2px solid var(--ember); outline-offset:1px;}
+  .split-input.veg{background:var(--leaf-tint); color:var(--leaf);}
+  .split-input.nonveg{background:var(--ember-tint); color:var(--ember-dark);}
+  .max{color:var(--smoke); font-size:11px; font-weight:500; flex:0 0 auto; white-space:nowrap;}
+  .out-toggle{
+    width:20px; height:20px; border-radius:6px; border:none; background:none; color:var(--smoke); cursor:pointer;
+    font-size:14px; line-height:1; flex-shrink:0; transition:background .15s, color .15s;
+  }
+  .out-toggle:hover{background:var(--cream-dim); color:var(--ember-dark);}
+
+  /* CARD GRIDS */
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px; align-items:start;}
+  .card{background:var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:20px 20px 16px;
+    box-shadow:var(--shadow); transition:outline .12s, background .12s, box-shadow .2s;}
+  .card.drag-over{outline:2px dashed var(--ember); outline-offset:-2px; background:var(--ember-tint);}
+  .card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+  summary.card-head{cursor:pointer; list-style:none; user-select:none;}
+  summary.card-head::-webkit-details-marker{display:none;}
+  details.card:not([open]) summary.card-head{margin-bottom:0; padding-bottom:0; border-bottom:none;}
+  summary.card-head .card-title::before{
+    content:'▸'; display:inline-block; margin-right:8px; font-size:12px; color:var(--smoke);
+    transition:transform .15s ease; transform:rotate(0deg);
+  }
+  details[open] summary.card-head .card-title::before{transform:rotate(90deg);}
+  .card-title{font-family:'Fraunces',serif; font-weight:600; font-size:19px; color:var(--char);}
+  .card-progress{font-family:'Inter',sans-serif; font-weight:600; font-size:12px; color:var(--smoke); background:var(--cream-dim); padding:3px 9px; border-radius:20px;}
+  ul.items{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px; min-height:10px;}
+  li.item{display:flex; align-items:flex-start; gap:10px; padding:11px 6px; border-radius:10px;}
+  li.item + li.item{border-top:1px solid var(--line);}
+  li.item:hover{background:var(--cream-dim);}
+  li.item.dragging{opacity:.35;}
+  li.item.checked .item-name{color:var(--smoke); text-decoration:line-through; text-decoration-color:var(--line-strong);}
+  .drag-handle{cursor:grab; color:var(--smoke); font-size:14px; padding-top:3px; user-select:none; opacity:.5;}
+  .drag-handle:hover{opacity:1;}
+  .checkbox{margin-top:2px; width:19px; height:19px; border-radius:6px; border:1.5px solid var(--line-strong); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; cursor:pointer; transition:background .15s, border-color .15s; background:var(--card-bg);}
+  .checkbox:hover{border-color:var(--ember);}
+  li.item.checked .checkbox{background:var(--leaf); border-color:var(--leaf);}
+  .item-row{flex:1; min-width:0; cursor:pointer; padding-top:1px; display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+  .item-name{font-size:15px; font-weight:500; color:var(--char-soft); line-height:1.45;}
+  .item-meta{font-size:12.5px; color:var(--smoke); font-weight:500; display:flex; gap:8px; flex-wrap:nowrap; align-items:center; flex-shrink:0; white-space:nowrap;}
+  .qty-tag{font-family:'IBM Plex Mono',monospace; background:var(--cream-dim); border-radius:6px; padding:2px 8px; font-weight:600; color:var(--char-soft); font-size:12px;}
+  .qty-tag.scaled{background:var(--ember-tint); color:var(--ember-dark);}
+  .qty-input{
+    width:auto; max-width:140px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600;
+    border:1px solid var(--line-strong); border-radius:6px; padding:3px 8px; background:var(--cream-dim); color:var(--char-soft);
+  }
+  .qty-input.overridden{background:var(--ember-tint); color:var(--ember-dark); border-color:var(--ember);}
+  .qty-input:focus{outline:none; border-color:var(--ember); box-shadow:0 0 0 3px var(--ember-tint);}
+  .reset-qty{cursor:pointer; color:var(--smoke); font-size:13px; background:none; border:none; padding:0; line-height:1;}
+  .reset-qty:hover{color:var(--ember-dark);}
+  .store-tag{color:var(--smoke); font-weight:500;}
+  .resp-tag{color:var(--ember-dark); font-weight:600;}
+  .diet-dot{width:6px;height:6px;border-radius:50%;display:inline-block; margin-right:2px;}
+  .diet-dot.veg{background:var(--leaf);} .diet-dot.nonveg{background:var(--ember);}
+  .item-del{background:none; border:none; color:var(--smoke); font-size:16px; cursor:pointer; padding:3px 5px; line-height:1; opacity:.3; margin-left:auto; border-radius:6px; transition:opacity .15s, background .15s;}
+  .item-del:hover{opacity:1; color:var(--ember-dark); background:var(--ember-tint);}
+  .cat-label{
+    font-family:'Inter',sans-serif; font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--ember-dark); padding:14px 6px 6px; margin-top:2px;
+  }
+  li.item + .cat-label{border-top:1px solid var(--line); margin-top:6px;}
+  .cat-label:first-child{padding-top:2px;}
+
+  /* MASTER LIST */
+  #masterList{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:28px 22px; align-items:start;}
+  .master-cat{margin-bottom:0;}
+  .master-cat:last-child{margin-bottom:0;}
+  .master-cat-title{
+    font-family:'Fraunces',serif; font-weight:600; font-size:21px; color:var(--char);
+    margin:0 0 14px; padding-bottom:10px; border-bottom:2px solid var(--line-strong);
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .master-cat-title .cat-count{font-family:'Inter',sans-serif; font-weight:600; font-size:12.5px; color:var(--smoke);}
+  .master-list-box{background:var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:16px 20px 8px; box-shadow:var(--shadow);}
+  .src-label{
+    font-family:'Inter',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--smoke-dark); padding:12px 6px 6px;
+  }
+  li.item + .src-label{border-top:1px solid var(--line); margin-top:4px;}
+  .src-label:first-child{padding-top:2px;}
+  .empty-note{color:var(--smoke); font-size:14px; padding:20px 4px; grid-column:1/-1;}
+
+  .add-card{border:1.5px dashed var(--line-strong); box-shadow:none; background:transparent;}
+  .add-card .add-trigger{width:100%; background:none; border:none; padding:10px 2px; cursor:pointer; color:var(--smoke);
+    font-family:'Inter',sans-serif; font-weight:600; font-size:14px; text-align:left; transition:color .15s;}
+  .add-card .add-trigger:hover{color:var(--ember-dark);}
+  .add-form{display:flex; flex-direction:column; gap:10px;}
+  .add-form input, .add-form select{
+    font-family:'Inter',sans-serif; font-size:14px; padding:9px 11px; border-radius:9px; border:1px solid var(--line-strong);
+    background:var(--cream); color:var(--char); width:100%;
+  }
+  .add-form input:focus, .add-form select:focus{outline:none; border-color:var(--ember); box-shadow:0 0 0 3px var(--ember-tint);}
+  .add-form label{font-family:'Inter',sans-serif; font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--smoke); margin-bottom:-5px;}
+  .add-form-row{display:flex; gap:8px;}
+  .add-form-row > div{flex:1;}
+  .add-form-actions{display:flex; gap:8px; margin-top:4px;}
+  .add-form-actions button{font-family:'Inter',sans-serif; font-weight:600; font-size:13px; border-radius:9px; padding:8px 14px; cursor:pointer; border:none; transition:background .15s;}
+  .btn-save{background:var(--ember); color:#fff;}
+  .btn-save:hover{background:var(--ember-dark);}
+  .btn-cancel{background:var(--cream-dim); color:var(--char-soft);}
+  .btn-cancel:hover{background:var(--line-strong);}
+
+  footer{margin-top:52px; text-align:center; font-size:12.5px; color:var(--smoke); font-weight:500;}
+
+  @media (max-width:520px){
+    .gauge-count .num{font-size:44px;}
+    header.hero{padding:32px 22px;}
+    .wrap{padding:24px 16px 72px;}
+    section{margin-top:38px;}
+    #masterList{grid-template-columns:1fr;}
+  }
+  /* VIEW PANEL VISIBILITY — placed last to win the specificity tie with .cards{display:grid} */
+  .view-panel{display:none !important;}
+  .view-panel.active{display:block !important;}
+  .view-panel.cards.active{display:grid !important;}
+  #masterList.active{display:grid !important;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-inner">
+    <p class="eyebrow">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12.5 2.5c.6 2.7-1.9 4.1-3.2 6.2-1.4 2.2-1.6 5 .2 6.9 1.2 1.3 3 1.8 4.6 1.2-1.1-.5-1.9-1.5-1.9-2.8 0-1.6 1.3-2.3 1.7-3.7.9 1 1.7 2 1.9 3.4.3 2-.7 3.9-2.4 5-3.6.6-7.6-1.8-8.3-5.5-.6-3.2 1.3-6 3.7-7.9 1.3-1 2.8-1.9 3.7-3.3" fill="currentColor"/></svg>
+      Telugu Gang · 2026 date TBD · Starts 10:00 AM
+    </p>
+    <h1><span class="hl">Grilling Party</span></h1>
+    <p class="tagline">Who's cooking what?</p>
+    <p class="subline">Adjust who's coming, drag items between people, and edit quantities — everyone sees it live.</p>
+    <div class="gauge">
+      <div class="gauge-count"><span class="num" id="gaugeNum">28</span><span class="of">/ 28 coming</span></div>
+      <div class="gauge-bar">
+        <div class="gauge-track"><div class="gauge-fill-veg" id="fillVeg" style="width:64%"></div><div class="gauge-fill-nonveg" id="fillNonveg" style="width:36%"></div></div>
+        <div class="gauge-legend"><span><span class="dot veg"></span><span id="vegCount">18</span> veg</span><span><span class="dot nonveg"></span><span id="nonvegCount">10</span> non-veg</span></div>
+      </div>
+    </div>
+    <p id="syncBadge" class="sync-badge">Checking sync status…</p>
+    </div>
+  </header>
+
+  <section id="rosterSection">
+    <div class="section-head"><h2>Who's coming</h2><span class="section-note">tap a number to edit it · × to mark a family out</span></div>
+    <div class="roster-legend"><span><span class="dot veg"></span>veg</span><span><span class="dot nonveg"></span>non-veg</span></div>
+    <div class="roster" id="roster"></div>
+  </section>
+
+  <section id="itemsSection">
+    <div class="section-head"><h2>Everything for the party</h2><span class="section-note">one view at a time — pick how you want to look at it</span></div>
+    <div class="view-tabs">
+      <button class="view-tab" data-view="all">All items</button>
+      <button class="view-tab" data-view="person">By person</button>
+      <button class="view-tab" data-view="store">Shopping list</button>
+    </div>
+    <input type="text" id="itemFilter" class="filter-input" placeholder="Search items, stores, or names…">
+    <div class="view-panel" data-panel="all" id="masterList"></div>
+    <div class="view-panel cards" data-panel="person" id="bringCards"></div>
+    <div class="view-panel cards" data-panel="store" id="shopCards"></div>
+  </section>
+
+  <footer>Changes — headcounts, checkmarks, reassignments, quantities — are shared live with everyone viewing this list.</footer>
+</div>
+
+<script>
+/* ---------- BASE DATA ---------- */
+const FAMILIES = [
+  {id:'anjan',    name:'Anjan',     count:6, defaultVeg:6},
+  {id:'chaitu',   name:'Chaitu',    count:3, defaultVeg:2},
+  {id:'gopi',     name:'Gopi',      count:3, defaultVeg:3},
+  {id:'madhu',    name:'Madhu',     count:4, defaultVeg:0},
+  {id:'prashanth',name:'Prashanth', count:4, defaultVeg:4},
+  {id:'rakesh',   name:'Rakesh',    count:4, defaultVeg:0},
+  {id:'sridhar',  name:'Sridhar',   count:4, defaultVeg:0},
+];
+const BASE_TOTAL = FAMILIES.reduce((s,f)=>s+f.count,0);
+const BASE_VEG = FAMILIES.reduce((s,f)=>s+f.defaultVeg,0);
+const BASE_NONVEG = BASE_TOTAL - BASE_VEG;
+
+const BASE_ITEMS = [
+  {id:'charcoal', name:'Charcoal', qty:{n:null,label:'1 bag'}, responsible:'Madhu / Gopi', store:null, diet:'both', cat:'equipment'},
+  {id:'starter', name:'Starter fluid', qty:{n:null,label:'1'}, responsible:'Madhu', store:null, diet:'both', cat:'equipment'},
+  {id:'quicklite', name:'Quicklite charcoal', qty:{n:null,label:''}, responsible:null, store:'Meijer', diet:'both', cat:'equipment'},
+  {id:'matches', name:'Matchbox / lighter', qty:{n:null,label:'1'}, responsible:'Sridhar', store:null, diet:'both', cat:'equipment'},
+  {id:'grill', name:'Grill', qty:{n:null,label:'2 (Madhu + Anjan, 1 each)'}, responsible:'Madhu / Anjan', store:null, diet:'both', cat:'equipment'},
+  {id:'tonks', name:'Tongs', qty:{n:null,label:'4'}, responsible:'Madhu / Chaitanya / Sridhar / Rakesh', store:null, diet:'both', cat:'equipment'},
+  {id:'knife', name:'Knife / pineapple cutter / cutting board', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'equipment'},
+  {id:'skewers', name:'Steel skewers', qty:{n:null,label:''}, responsible:'Everyone', store:null, diet:'both', cat:'equipment'},
+  {id:'coolers', name:'Ice box (cooler)', qty:{n:null,label:'2'}, responsible:'Chaitanya', store:null, diet:'both', cat:'equipment'},
+  {id:'chairs', name:'Camping chairs', qty:{n:null,label:'bring your own'}, responsible:'Everyone', store:null, diet:'both', cat:'equipment'},
+  {id:'tarp', name:'Tarp / tablecloths', qty:{n:null,label:''}, responsible:null, store:'Meijer', diet:'both', cat:'equipment'},
+  {id:'grillplate', name:'Grill plate', qty:{n:null,label:''}, responsible:'Sridhar', store:'Costco / Meijer', diet:'both', cat:'equipment'},
+  {id:'glasses', name:'Glasses for drinks & water', qty:{n:null,label:''}, responsible:null, store:'Costco', diet:'both', cat:'tableware'},
+  {id:'teaglasses', name:'Tea glasses', qty:{n:null,label:''}, responsible:null, store:'Costco', diet:'both', cat:'tableware'},
+  {id:'forks', name:'Forks', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'tableware'},
+  {id:'spoons', name:'Spoons', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'tableware'},
+  {id:'saltpepper', name:'Salt & pepper', qty:{n:null,label:''}, responsible:'Sridhar', store:null, diet:'both', cat:'tableware'},
+  {id:'sugartea', name:'Sugar / tea powder / bowl / strainer', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'drinks'},
+  {id:'elachi', name:'Elachi / ginger for tea', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'drinks'},
+  {id:'curdrice', name:'Curd rice', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'veg', cat:'food'},
+  {id:'cricket', name:'Cricket set', qty:{n:null,label:''}, responsible:'Sridhar', store:null, diet:'both', cat:'games'},
+  {id:'housie', name:'Housie (tambola)', qty:{n:null,label:''}, responsible:'Chaitanya', store:null, diet:'both', cat:'games'},
+  {id:'soccer', name:'Soccer ball', qty:{n:null,label:'1'}, responsible:'Sridhar', store:null, diet:'both', cat:'games'},
+  {id:'shuttle', name:'Shuttle / badminton set', qty:{n:null,label:''}, responsible:'Sridhar / Madhu', store:null, diet:'both', cat:'games'},
+
+  {id:'oliveoil', name:'Olive oil spray', qty:{n:1,unit:'bottle'}, responsible:null, store:'Meijer', diet:'both', cat:'tableware'},
+  {id:'papertowels', name:'Paper towels', qty:{n:2,unit:'rolls'}, responsible:'Madhu', store:null, diet:'both', cat:'tableware'},
+  {id:'trashbags', name:'Trash bags', qty:{n:6,unit:''}, responsible:'Rakesh', store:null, diet:'both', cat:'tableware'},
+  {id:'ice', name:'Ice', qty:{n:2,unit:'bags'}, responsible:null, store:'Meijer', diet:'both', cat:'tableware'},
+  {id:'plates', name:'Plates (50 count)', qty:{n:1,unit:'pack of 50'}, responsible:null, store:'Meijer', diet:'both', cat:'tableware'},
+  {id:'bowls', name:'Bowls', qty:{n:1,unit:'pack'}, responsible:null, store:'Costco', diet:'both', cat:'tableware'},
+  {id:'groundchicken', name:'Ground chicken', qty:{n:3,unit:'packets'}, responsible:'Sridhar', store:'Meijer', diet:'nonveg', cat:'food'},
+  {id:'chickenlegs', name:'Chicken leg quarters', qty:{n:4,unit:'lbs'}, responsible:'Sridhar', store:'Halal', diet:'nonveg', cat:'food'},
+  {id:'blackbean', name:'Black bean burgers', qty:{n:21,unit:'ct (18–24 pack)'}, responsible:null, store:'Costco', diet:'veg', cat:'food'},
+  {id:'buns', name:'Bread / buns', qty:{n:40,unit:'buns'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'lemons', name:'Lemons', qty:{n:1,unit:'pack'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'peppers', name:'Green pepper (multicolor)', qty:{n:1,unit:'pack'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'onions', name:'Red onions', qty:{n:5,unit:'lb bag'}, responsible:null, store:'Meijer', diet:'both', cat:'food'},
+  {id:'paneer', name:'Paneer', qty:{n:4,unit:''}, responsible:'Anjan', store:'Costco', diet:'veg', cat:'food'},
+  {id:'tomatoes', name:'Tomatoes', qty:{n:6,unit:''}, responsible:null, store:'Meijer', diet:'both', cat:'food'},
+  {id:'corn', name:'Corn', qty:{n:24,unit:'ears'}, responsible:null, store:'Meijer', diet:'both', cat:'food'},
+  {id:'mint', name:'Mint', qty:{n:2,unit:'bunches'}, responsible:null, store:'Meijer', diet:'both', cat:'food'},
+  {id:'jalapenos', name:'Pickled jalapeños', qty:{n:1,unit:'bottle'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'cucumbers', name:'Pickled cucumbers', qty:{n:1,unit:'bottle'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'cheese', name:'American cheese slices', qty:{n:1,unit:'pack'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'watermelon', name:'Watermelon', qty:{n:1,unit:''}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'pineapple', name:'Pineapple', qty:{n:3,unit:''}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'lemonade', name:'Lemonade', qty:{n:2,unit:''}, responsible:null, store:'Costco', diet:'both', cat:'drinks'},
+  {id:'sprite', name:'Sprite / Coke', qty:{n:12,unit:'pack'}, responsible:null, store:null, diet:'both', cat:'drinks'},
+  {id:'soda', name:'Soda (2-liter bottles)', qty:{n:2,unit:'× 2L bottles'}, responsible:null, store:null, diet:'both', cat:'drinks'},
+  {id:'milk', name:'Milk', qty:{n:2,unit:'gallons'}, responsible:null, store:null, diet:'both', cat:'drinks'},
+  {id:'water', name:'Water (5L jugs)', qty:{n:5,unit:'× 5L jugs'}, responsible:null, store:'Meijer', diet:'both', cat:'drinks'},
+
+  {id:'napkins', name:'Napkins', qty:{n:2,unit:'packs'}, responsible:null, store:'Costco', diet:'both', cat:'tableware'},
+  {id:'foil', name:'Aluminum foil', qty:{n:1,unit:'roll'}, responsible:null, store:'Meijer', diet:'both', cat:'tableware'},
+  {id:'condiments', name:'Condiments (ketchup / mustard / mayo / BBQ sauce)', qty:{n:1,unit:'set'}, responsible:null, store:'Costco', diet:'both', cat:'food'},
+  {id:'wetwipes', name:'Hand sanitizer / wet wipes', qty:{n:2,unit:''}, responsible:null, store:'Meijer', diet:'both', cat:'tableware'},
+
+  {id:'servingtongs', name:'Separate serving tongs/spoons for veg vs non-veg', qty:{n:null,label:'2 sets'}, responsible:null, store:null, diet:'both', cat:'tableware'},
+  {id:'drinkscooler', name:'Drinks cooler (separate from food cooler)', qty:{n:null,label:'1'}, responsible:null, store:null, diet:'both', cat:'equipment'},
+  {id:'speaker', name:'Bluetooth speaker', qty:{n:null,label:'1'}, responsible:null, store:null, diet:'both', cat:'equipment'},
+  {id:'gloves', name:'Disposable gloves (for raw chicken)', qty:{n:null,label:'1 box'}, responsible:null, store:null, diet:'both', cat:'tableware'},
+  {id:'sunscreen', name:'Sunscreen', qty:{n:null,label:''}, responsible:null, store:null, diet:'both', cat:'tableware'},
+  {id:'thermometer', name:'Meat thermometer', qty:{n:null,label:'1'}, responsible:null, store:null, diet:'both', cat:'equipment'},
+];
+
+/* ---------- STATE ---------- */
+let attendance = {}; FAMILIES.forEach(f=>attendance[f.id]={v:f.defaultVeg, nv:f.count-f.defaultVeg});
+let checked = {};
+let itemsState = { overrides:{}, deleted:[], custom:[] }; // overrides: {id:{responsible?, qtyOverride?}}
+
+const ATT_KEY = 'grilling-2026-attendance';
+const CHK_KEY = 'grilling-2026-checklist';
+const ITEMS_KEY = 'grilling-2026-items-state';
+
+/* ---------- STORAGE LAYER ----------
+   Works two ways so the SAME file works both inside Claude and hosted anywhere else:
+   1) Inside Claude (claude.ai) — uses window.storage, shared:true. Nothing to configure.
+   2) Hosted elsewhere (GitHub Pages, Netlify, etc.) — uses Supabase for live sync.
+      Fill in SUPABASE_URL and SUPABASE_ANON_KEY below to enable this.
+*/
+const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';       // e.g. 'https://abcdefgh.supabase.co'
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+const HAS_CLAUDE_STORAGE = (typeof window.storage !== 'undefined' && window.storage);
+const SUPABASE_CONFIGURED = SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY.length > 20;
+let sb = null;
+if(!HAS_CLAUDE_STORAGE && SUPABASE_CONFIGURED && typeof supabase !== 'undefined'){
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+const SYNC_MODE = HAS_CLAUDE_STORAGE ? 'claude' : (sb ? 'supabase' : 'local-only');
+
+async function kvGet(key){
+  if(SYNC_MODE==='claude'){
+    try{ const r = await window.storage.get(key, true); return r ? r.value : null; }catch(e){ return null; }
+  }
+  if(SYNC_MODE==='supabase'){
+    try{
+      const {data, error} = await sb.from('party_kv').select('value').eq('key', key).maybeSingle();
+      if(error || !data) return null;
+      return data.value;
+    }catch(e){ return null; }
+  }
+  try{ return localStorage.getItem(key); }catch(e){ return null; } // last-resort, this device only
+}
+async function kvSet(key, value){
+  if(SYNC_MODE==='claude'){
+    try{ await window.storage.set(key, value, true); }catch(e){ console.error(e); }
+    return;
+  }
+  if(SYNC_MODE==='supabase'){
+    try{ await sb.from('party_kv').upsert({key, value, updated_at:new Date().toISOString()}); }catch(e){ console.error(e); }
+    return;
+  }
+  try{ localStorage.setItem(key, value); }catch(e){}
+}
+
+async function loadState(){
+  try{
+    const a = await kvGet(ATT_KEY);
+    if(a){
+      const saved = JSON.parse(a);
+      FAMILIES.forEach(f=>{
+        const s = saved[f.id];
+        if(s == null) return;
+        if(typeof s === 'number'){ attendance[f.id] = {v:Math.min(f.defaultVeg, s), nv:Math.max(0,s-f.defaultVeg)}; } // oldest format compat
+        else if('n' in s){ attendance[f.id] = {v:s.v, nv:s.n-s.v}; } // previous format compat
+        else{ attendance[f.id] = {v:s.v, nv:s.nv}; }
+      });
+    }
+  }catch(e){}
+  try{ const c = await kvGet(CHK_KEY); if(c) checked = JSON.parse(c); }catch(e){}
+  try{ const i = await kvGet(ITEMS_KEY); if(i) itemsState = {overrides:{}, deleted:[], custom:[], ...JSON.parse(i)}; }catch(e){}
+  renderAll();
+  renderSyncBadge();
+}
+async function saveAttendance(){ await kvSet(ATT_KEY, JSON.stringify(attendance)); }
+async function saveChecked(){ await kvSet(CHK_KEY, JSON.stringify(checked)); }
+async function saveItemsState(){ await kvSet(ITEMS_KEY, JSON.stringify(itemsState)); }
+
+function renderSyncBadge(){
+  const el = document.getElementById('syncBadge');
+  if(!el) return;
+  if(SYNC_MODE==='claude'){ el.textContent = 'Synced live for everyone viewing this chat'; }
+  else if(SYNC_MODE==='supabase'){ el.textContent = 'Synced live for everyone with this link'; }
+  else { el.textContent = 'Not synced — this device only (add Supabase keys to enable live sync)'; }
+}
+
+// Live updates from other people, when hosted outside Claude via Supabase.
+if(SYNC_MODE==='supabase'){
+  sb.channel('party_kv_changes')
+    .on('postgres_changes', {event:'*', schema:'public', table:'party_kv'}, ()=>{ loadState(); })
+    .subscribe();
+  setInterval(loadState, 20000); // safety-net poll in case a realtime event is missed
+}
+
+/* ---------- DERIVED ITEMS ---------- */
+function getEffectiveItems(){
+  const deletedSet = new Set(itemsState.deleted);
+  const base = BASE_ITEMS.filter(i=>!deletedSet.has(i.id)).map(i=>{
+    const ov = itemsState.overrides[i.id];
+    if(!ov) return {...i, isCustom:false};
+    return {...i, responsible: (ov.responsible!==undefined ? ov.responsible : i.responsible), _qtyOverride: ov.qtyOverride, isCustom:false};
+  });
+  const custom = itemsState.custom.map(i=>({...i, isCustom:true}));
+  return base.concat(custom);
+}
+function setResponsible(id, isCustom, newPerson){
+  if(isCustom){
+    const it = itemsState.custom.find(i=>i.id===id);
+    if(it) it.responsible = newPerson;
+  } else {
+    itemsState.overrides[id] = itemsState.overrides[id] || {};
+    itemsState.overrides[id].responsible = newPerson;
+  }
+  saveItemsState();
+}
+function setQtyOverride(id, isCustom, value){
+  if(isCustom){
+    const it = itemsState.custom.find(i=>i.id===id);
+    if(it) it.qty = {n:null, label:value};
+  } else {
+    itemsState.overrides[id] = itemsState.overrides[id] || {};
+    if(value===''){ delete itemsState.overrides[id].qtyOverride; }
+    else { itemsState.overrides[id].qtyOverride = value; }
+  }
+  saveItemsState();
+}
+function resetQtyOverride(id){
+  if(itemsState.overrides[id]) delete itemsState.overrides[id].qtyOverride;
+  saveItemsState();
+}
+function deleteItem(id, isCustom){
+  if(isCustom){ itemsState.custom = itemsState.custom.filter(i=>i.id!==id); }
+  else { if(!itemsState.deleted.includes(id)) itemsState.deleted.push(id); }
+  saveItemsState();
+}
+function addCustomItem({name, qtyLabel, responsible, store, diet}){
+  const id = 'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+  itemsState.custom.push({id, name, qty:{n:null,label:qtyLabel||''}, responsible: responsible||null, store: store||null, diet: diet||'both'});
+  saveItemsState();
+  return id;
+}
+
+/* ---------- SCALING ---------- */
+function totals(){
+  let veg=0, nonveg=0;
+  FAMILIES.forEach(f=>{
+    const a = attendance[f.id] ?? {v:f.defaultVeg, nv:f.count-f.defaultVeg};
+    veg += a.v;
+    nonveg += a.nv;
+  });
+  return {total: veg+nonveg, veg, nonveg};
+}
+function autoDisplay(item){
+  if(item.qty.n===null) return item.qty.label;
+  const t = totals();
+  let ratio;
+  if(item.diet==='veg') ratio = BASE_VEG ? t.veg/BASE_VEG : 1;
+  else if(item.diet==='nonveg') ratio = BASE_NONVEG ? t.nonveg/BASE_NONVEG : 1;
+  else ratio = BASE_TOTAL ? t.total/BASE_TOTAL : 1;
+  const scaled = Math.max(0, Math.ceil(item.qty.n * ratio));
+  return `${scaled}${item.qty.unit ? ' '+item.qty.unit : ''}`;
+}
+function getQtyInfo(item){
+  const auto = autoDisplay(item);
+  if(item._qtyOverride !== undefined && item._qtyOverride !== ''){
+    return {display:item._qtyOverride, overridden:true, auto};
+  }
+  return {display:auto, overridden:false, auto};
+}
+
+/* ---------- RENDER ---------- */
+function renderGauge(){
+  const t = totals();
+  const totalRounded = Math.round(t.total);
+  const vegRounded = Math.round(t.veg);
+  const nonvegRounded = totalRounded - vegRounded; // ensures the two always sum to the total shown
+  document.getElementById('gaugeNum').textContent = totalRounded;
+  document.getElementById('vegCount').textContent = vegRounded;
+  document.getElementById('nonvegCount').textContent = nonvegRounded;
+  const vp = t.total ? (t.veg/t.total*100) : 0, np = t.total ? (t.nonveg/t.total*100) : 0;
+  document.getElementById('fillVeg').style.width = vp+'%';
+  document.getElementById('fillNonveg').style.width = np+'%';
+}
+
+function renderRoster(){
+  const el = document.getElementById('roster'); el.innerHTML = '';
+  FAMILIES.forEach(f=>{
+    const a = attendance[f.id] ?? {v:f.defaultVeg, nv:f.count-f.defaultVeg};
+    const v = a.v, nv = a.nv, n = v + nv;
+    const card = document.createElement('div');
+    card.className = 'fam-card'+(n===0?' out':'');
+    card.innerHTML = `
+      <span class="fam-name">${f.name}</span>
+      <input type="number" class="split-input veg" data-fam="${f.id}" data-kind="v" value="${v}" min="0" max="${f.count}" title="veg">
+      <input type="number" class="split-input nonveg" data-fam="${f.id}" data-kind="nv" value="${nv}" min="0" max="${f.count}" title="non-veg">
+      <span class="max">of ${f.count}</span>
+      <button class="out-toggle" data-toggle="${f.id}" title='${n>0 ? "can\u2019t make it" : "restore"}'>${n>0 ? '×' : '+'}</button>`;
+    el.appendChild(card);
+  });
+  el.querySelectorAll('.split-input').forEach(inp=>inp.addEventListener('change', ()=>{
+    const fam = inp.dataset.fam, kind = inp.dataset.kind, famDef = FAMILIES.find(f=>f.id===fam);
+    const cur = attendance[fam] ?? {v:famDef.defaultVeg, nv:famDef.count-famDef.defaultVeg};
+    let val = Math.max(0, Math.min(famDef.count, parseInt(inp.value,10) || 0));
+    const other = kind==='v' ? 'nv' : 'v';
+    let next = {...cur, [kind]: val};
+    if(next.v + next.nv > famDef.count) next[other] = Math.max(0, famDef.count - val); // keep total within headcount
+    attendance[fam] = next;
+    saveAttendance(); renderAll();
+  }));
+  el.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click', ()=>{
+    const fam = btn.dataset.toggle, famDef = FAMILIES.find(f=>f.id===fam);
+    const cur = attendance[fam] ?? {v:famDef.defaultVeg, nv:famDef.count-famDef.defaultVeg};
+    attendance[fam] = (cur.v+cur.nv>0) ? {v:0, nv:0} : {v:famDef.defaultVeg, nv:famDef.count-famDef.defaultVeg};
+    saveAttendance(); renderAll();
+  }));
+}
+
+const CAT_ORDER = ['equipment','food','drinks','tableware','games','other'];
+const CAT_LABEL = {equipment:'Equipment & Setup', food:'Food', drinks:'Drinks', tableware:'Tableware & Supplies', games:'Games & Fun', other:'Other'};
+const PHASE_MAP = {equipment:'setup', tableware:'setup', food:'food', drinks:'food', games:'games', other:'setup'};
+const PHASE_ORDER = ['setup','food','games'];
+const PHASE_LABEL = {setup:'Setup', food:'Food', games:'Games'};
+function phaseOf(item){ return PHASE_MAP[item.cat] || 'setup'; }
+function sortByCat(list){
+  return list.slice().sort((a,b)=> CAT_ORDER.indexOf(a.cat||'other') - CAT_ORDER.indexOf(b.cat||'other'));
+}
+function groupedListHtml(list, rowOpts){
+  const sorted = sortByCat(list);
+  let html = '', lastCat = null;
+  sorted.forEach(item=>{
+    const cat = item.cat || 'other';
+    if(cat !== lastCat){
+      html += `<li class="cat-label">${CAT_LABEL[cat]}</li>`;
+      lastCat = cat;
+    }
+    html += itemRowHtml(item, typeof rowOpts==='function' ? rowOpts(item) : rowOpts);
+  });
+  return html;
+}
+
+function itemRowHtml(item, opts){
+  const checkKey = opts.checkKey || item.id;
+  const isChecked = !!checked[checkKey];
+  const storeTag = item.store ? `<span class="store-tag">· ${item.store}</span>` : '';
+  const respTag = (opts.showResponsible && item.responsible) ? `<span class="resp-tag">→ ${item.responsible}</span>` : '';
+  const dietDot = item.diet==='veg' ? '<span class="diet-dot veg"></span>' : item.diet==='nonveg' ? '<span class="diet-dot nonveg"></span>' : '';
+  let qtyHtml = '';
+  if(opts.editableQty){
+    const q = getQtyInfo(item);
+    qtyHtml = `<input class="qty-input ${q.overridden?'overridden':''}" data-qty-item="${item.id}" data-custom="${item.isCustom}" value="${q.display}" placeholder="add qty">`;
+    if(q.overridden && item.qty.n!==null && !item.isCustom){
+      qtyHtml += `<button class="reset-qty" data-reset-item="${item.id}" title="revert to auto (${q.auto})">↺</button>`;
+    }
+  } else {
+    const q = getQtyInfo(item);
+    if(q.display) qtyHtml = `<span class="qty-tag ${q.overridden?'scaled':''}">${q.display}</span>`;
+  }
+  return `
+    <li class="item" data-item="${item.id}" data-custom="${item.isCustom}" draggable="${opts.draggable?'true':'false'}">
+      ${opts.draggable ? '<span class="drag-handle">⠿</span>' : ''}
+      <span class="checkbox" data-check="${checkKey}">${isChecked?'✓':''}</span>
+      <div class="item-row" data-checkarea="${checkKey}">
+        <span class="item-name">${dietDot} ${item.name}${item.responsible==='Everyone' && opts.personTag ? ` <span style="color:var(--smoke); font-weight:400;">(everyone)</span>` : ''}</span>
+        <span class="item-meta">${qtyHtml}${storeTag}${respTag}</span>
+      </div>
+      <button class="item-del" data-del="${item.id}" data-delcustom="${item.isCustom}" title="remove item">×</button>
+    </li>`;
+}
+
+function bindCommon(container){
+  container.querySelectorAll('[data-check], [data-checkarea]').forEach(elm=>{
+    elm.addEventListener('click', (e)=>{
+      const id = elm.dataset.check || elm.dataset.checkarea;
+      checked[id] = !checked[id]; saveChecked(); renderAll();
+    });
+  });
+  container.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      deleteItem(btn.dataset.del, btn.dataset.delcustom==='true');
+      renderAll();
+    });
+  });
+  container.querySelectorAll('[data-qty-item]').forEach(inp=>{
+    inp.addEventListener('click', e=>e.stopPropagation());
+    inp.addEventListener('change', ()=>{
+      setQtyOverride(inp.dataset.qtyItem, inp.dataset.custom==='true', inp.value.trim());
+      renderAll();
+    });
+  });
+  container.querySelectorAll('[data-reset-item]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); resetQtyOverride(btn.dataset.resetItem); renderAll(); });
+  });
+}
+
+let dragItemId = null, dragItemCustom = false;
+function bindDrag(container){
+  container.querySelectorAll('li.item[draggable="true"]').forEach(li=>{
+    li.addEventListener('dragstart', ()=>{
+      dragItemId = li.dataset.item; dragItemCustom = li.dataset.custom==='true';
+      li.classList.add('dragging');
+    });
+    li.addEventListener('dragend', ()=> li.classList.remove('dragging'));
+  });
+}
+function bindDropzone(cardEl, personName){
+  cardEl.addEventListener('dragover', (e)=>{ e.preventDefault(); cardEl.classList.add('drag-over'); });
+  cardEl.addEventListener('dragleave', ()=> cardEl.classList.remove('drag-over'));
+  cardEl.addEventListener('drop', (e)=>{
+    e.preventDefault(); cardEl.classList.remove('drag-over');
+    if(dragItemId){ setResponsible(dragItemId, dragItemCustom, personName); dragItemId=null; renderAll(); }
+  });
+}
+
+function addFormHtml(context){
+  return `
+    <div class="add-form">
+      <div><label>Item name</label><input type="text" data-f="name" placeholder="e.g. Napkins"></div>
+      <div class="add-form-row">
+        <div><label>Quantity</label><input type="text" data-f="qty" placeholder="e.g. 2 packs"></div>
+        <div><label>Store</label><select data-f="store"><option value="">None</option><option>Meijer</option><option>Costco</option><option>Halal</option></select></div>
+      </div>
+      <div><label>Assigned to</label><input type="text" data-f="responsible" placeholder="Person's name (optional)" value="${context||''}"></div>
+      <div class="add-form-actions"><button class="btn-save" data-save-add>Add item</button><button class="btn-cancel" data-cancel-add>Cancel</button></div>
+    </div>`;
+}
+function bindAddCard(cardEl, defaultResponsible){
+  const trigger = cardEl.querySelector('.add-trigger');
+  trigger.addEventListener('click', ()=>{
+    cardEl.innerHTML = addFormHtml(defaultResponsible);
+    cardEl.querySelector('[data-cancel-add]').addEventListener('click', renderAll);
+    cardEl.querySelector('[data-save-add]').addEventListener('click', ()=>{
+      const name = cardEl.querySelector('[data-f="name"]').value.trim();
+      if(!name) return;
+      const qty = cardEl.querySelector('[data-f="qty"]').value.trim();
+      const store = cardEl.querySelector('[data-f="store"]').value || null;
+      const responsible = cardEl.querySelector('[data-f="responsible"]').value.trim() || null;
+      addCustomItem({name, qtyLabel:qty, responsible, store, diet:'both'});
+      renderAll();
+    });
+  });
+}
+
+const CANON_PEOPLE = ['Madhu','Anjan','Chaitanya','Sridhar','Rakesh','Gopi','Prashanth'];
+function renderBringCards(){
+  const el = document.getElementById('bringCards'); el.innerHTML = '';
+  const items = getEffectiveItems();
+  const namedPeople = items.filter(i=>i.responsible && i.responsible!=='Everyone').flatMap(i=>i.responsible.split(' / '));
+  const hasEveryoneItem = items.some(i=>i.responsible==='Everyone');
+  const people = [...new Set([...CANON_PEOPLE.filter(()=>hasEveryoneItem), ...namedPeople])].sort();
+  const bringKey = (item, person) => item.responsible==='Everyone' ? `${item.id}::${person}` : item.id;
+
+  // Unassigned bring-list items: no store (not a shopping-list item) and no one claimed yet.
+  const unclaimed = items.filter(i=>!i.store && !i.responsible);
+  if(unclaimed.length){
+    const doneCount = unclaimed.filter(i=>checked[i.id]).length;
+    const card = document.createElement('details'); card.className = 'card'; card.open = true;
+    card.innerHTML = `<summary class="card-head"><span class="card-title">Unassigned</span><span class="card-progress">${doneCount}/${unclaimed.length}</span></summary>
+      <ul class="items">${groupedListHtml(unclaimed, {draggable:true, editableQty:false})}</ul>`;
+    el.appendChild(card);
+    bindCommon(card); bindDrag(card); bindDropzone(card, null);
+  }
+
+  people.forEach(person=>{
+    const mine = items.filter(i=>i.responsible && (i.responsible==='Everyone' || i.responsible.split(' / ').includes(person)));
+    if(!mine.length) return;
+    const doneCount = mine.filter(i=>checked[bringKey(i,person)]).length;
+    const card = document.createElement('details'); card.className = 'card'; card.open = true;
+    card.innerHTML = `<summary class="card-head"><span class="card-title">${person}</span><span class="card-progress">${doneCount}/${mine.length}</span></summary>
+      <ul class="items">${groupedListHtml(mine, i=>({draggable:true, editableQty:false, personTag:true, checkKey:bringKey(i,person)}))}</ul>`;
+    el.appendChild(card);
+    bindCommon(card); bindDrag(card); bindDropzone(card, person);
+  });
+  const addCard = document.createElement('div'); addCard.className = 'card add-card';
+  addCard.innerHTML = `<button class="add-trigger">+ add item to bring</button>`;
+  el.appendChild(addCard); bindAddCard(addCard, '');
+}
+
+function renderShopCards(){
+  const el = document.getElementById('shopCards'); el.innerHTML = '';
+  const items = getEffectiveItems();
+  const stores = ['Meijer','Costco','Halal'];
+  stores.forEach(store=>{
+    const mine = items.filter(i=>i.store && i.store.includes(store));
+    if(!mine.length) return;
+    const doneCount = mine.filter(i=>checked[i.id]).length;
+    const card = document.createElement('details'); card.className = 'card';
+    card.innerHTML = `<summary class="card-head"><span class="card-title">${store}</span><span class="card-progress">${doneCount}/${mine.length}</span></summary>
+      <ul class="items">${groupedListHtml(mine, {draggable:false, editableQty:true})}</ul>`;
+    el.appendChild(card);
+    bindCommon(card);
+  });
+  const addCard = document.createElement('div'); addCard.className = 'card add-card';
+  addCard.innerHTML = `<button class="add-trigger">+ add item to shopping list</button>`;
+  el.appendChild(addCard); bindAddCard(addCard, '');
+}
+
+let filterQuery = '';
+function matchesFilter(item){
+  if(!filterQuery) return true;
+  const q = filterQuery.toLowerCase();
+  return (item.name||'').toLowerCase().includes(q) ||
+         (item.store||'').toLowerCase().includes(q) ||
+         (item.responsible||'').toLowerCase().includes(q);
+}
+
+function renderMasterList(){
+  const el = document.getElementById('masterList'); el.innerHTML = '';
+  const items = getEffectiveItems().filter(matchesFilter);
+  if(!items.length){ el.innerHTML = `<div class="empty-note">No items match "${filterQuery}".</div>`; return; }
+  PHASE_ORDER.forEach(phase=>{
+    const inPhase = items.filter(i=>phaseOf(i)===phase);
+    if(!inPhase.length) return;
+    const sorted = sortByCat(inPhase);
+    const catBlock = document.createElement('div'); catBlock.className = 'master-cat';
+    let html = `<h3 class="master-cat-title">${PHASE_LABEL[phase]} <span class="cat-count">${inPhase.length} item${inPhase.length===1?'':'s'}</span></h3><div class="master-list-box"><ul class="items">`;
+    sorted.forEach(i=>{ html += itemRowHtml(i, {draggable:false, editableQty:false, showResponsible:true}); });
+    html += `</ul></div>`;
+    catBlock.innerHTML = html;
+    el.appendChild(catBlock);
+    bindCommon(catBlock);
+  });
+}
+
+const VIEWS = ['all','person','store'];
+let currentView = 'all';
+function setView(view){
+  currentView = view;
+  document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+  document.querySelectorAll('.view-panel').forEach(p=>p.classList.toggle('active', p.dataset.panel===view));
+}
+document.querySelectorAll('.view-tab').forEach(t=>t.addEventListener('click', ()=>setView(t.dataset.view)));
+document.getElementById('itemFilter').addEventListener('input', (e)=>{ filterQuery = e.target.value.trim(); renderMasterList(); });
+
+function renderAll(){ renderGauge(); renderRoster(); renderMasterList(); renderBringCards(); renderShopCards(); }
+setView('all');
+loadState();
+</script>
+</body>
+</html>
